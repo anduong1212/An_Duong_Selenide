@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Suite">
+
+    <test name="VietJet Air Test">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="testcases.vietjet.HomePageTest">
+                <methods>
+                    <include name="test"/>
+                    <include name="test2"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
