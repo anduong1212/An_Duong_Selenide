@@ -14,7 +14,7 @@ public class PropertyUtils {
     private static Properties properties;
     private static FileInputStream inputStream;
     private static FileOutputStream outputStream;
-    private static final String defaultFilePath = "/src/test/resources/application.properties";
+    private static final String defaultFilePath = "/src/test/resources/selenide.properties";
     private static volatile PropertyUtils instance;
 
     private PropertyUtils(){
