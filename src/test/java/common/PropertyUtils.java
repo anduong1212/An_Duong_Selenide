@@ -12,8 +12,6 @@ import java.util.Properties;
 
 public class PropertyUtils {
     private static Properties properties;
-    private static FileInputStream inputStream;
-    private static FileOutputStream outputStream;
     private static final String defaultFilePath = "/src/test/resources/selenide.properties";
     private static volatile PropertyUtils instance;
 
@@ -24,8 +22,7 @@ public class PropertyUtils {
     private void loadProperties(){
         properties = new Properties();
         try{
-            inputStream = new FileInputStream(Utilities.getProjectPath() + defaultFilePath);
-            //Load properties
+            FileInputStream inputStream = new FileInputStream(Utilities.getProjectPath() + defaultFilePath);
             properties.load(inputStream);
 
         } catch (IOException exception){
@@ -46,10 +43,13 @@ public class PropertyUtils {
         }
     }
     public String getPropertyValue(String keyOfProp){
+        if (getProperties() == null){
+            throw new IllegalStateException("You need to call loadProperties() before call getPropertyValue() ");
+        }
         return getProperties().getProperty(keyOfProp);
     }
 
-    public Properties getProperties(){
+    private Properties getProperties(){
         return properties;
     }
 
@@ -58,7 +58,7 @@ public class PropertyUtils {
         return instance;
     }
 
-    public static void setPropertiesToFile(Map<String, String> propsMap, String outputFilePath){
+    public void setPropertiesToFile(Map<String, String> propsMap, String outputFilePath){
         File file = new File(outputFilePath);
         Path path = Paths.get(outputFilePath);
 

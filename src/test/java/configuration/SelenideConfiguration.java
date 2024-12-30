@@ -12,7 +12,6 @@ public class SelenideConfiguration extends SelenideConfig {
 
 
     public static void configure(){
-        loadConfig();
         Configuration.browser = config.browser();
         Configuration.baseUrl = config.baseUrl();
         Configuration.timeout = config.timeout();
@@ -26,7 +25,7 @@ public class SelenideConfiguration extends SelenideConfig {
     public static void loadConfig(){
         getConfig().browser(System.getProperty("selenide.browser"));
         getConfig().baseUrl(System.getProperty("selenide.browser"));
-//        getConfig().timeout(Long.parseLong(System.getProperty("selenide.timeout")));
+        getConfig().timeout(Long.parseLong(System.getProperty("selenide.timeout")));
         getConfig().headless(Boolean.parseBoolean(System.getProperty("selenide.headless")));
         getConfig().remote(System.getProperty("selenide.remote", ""));
         getConfig().browserSize(System.getProperty("selenide.browserSize"));
