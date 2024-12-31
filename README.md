@@ -1,6 +1,6 @@
 # An_Duong_Selenide
                     
-## Framework Implementation Feature
+## Framework Implemented Features
                     
 First Header                        | Second Header
 -------------                       | -------------
