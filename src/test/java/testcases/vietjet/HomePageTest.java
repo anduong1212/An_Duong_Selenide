@@ -14,7 +14,11 @@ public class HomePageTest extends TestBase {
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void test2(){
 
+        homePage.acceptCookie();
         homePage.inputDepartDestination("SGN");
+        homePage.inputArrivalDestination("HAN");
+        homePage.selectDepartureDate();
+       Selenide.sleep(1000);
 
     }
 }

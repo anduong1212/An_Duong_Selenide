@@ -2,9 +2,9 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="VietJetAir Smoke Suite">
 
-    <test name="VietJet Air Test_VN_locale">
+    <test name="VietJet Air Test_EN_locale">
         <parameter name="browser" value="chrome"/>
-        <parameter name="locale" value="VN"/>
+        <parameter name="locale" value="EN"/>
         <classes>
             <class name="testcases.vietjet.HomePageTest">
                 <methods>

@@ -20,6 +20,7 @@ public class SelenideConfiguration extends SelenideConfig {
         Configuration.browserSize = config.browserSize();
         Configuration.browserPosition = config.browserPosition();
         Configuration.reportsFolder = config.reportsFolder();
+        Configuration.screenshots = config.screenshots();
     }
 
     public static void loadConfig(){
@@ -31,7 +32,7 @@ public class SelenideConfiguration extends SelenideConfig {
         getConfig().browserSize(System.getProperty("selenide.browserSize"));
         getConfig().browserPosition(System.getProperty("selenide.browserPosition"));
         getConfig().savePageSource(Boolean.parseBoolean(System.getProperty("selenide.savePageSource")));
-        getConfig().savePageSource(Boolean.parseBoolean(System.getProperty("selenide.saveScreenshots")));
+        getConfig().screenshots(Boolean.parseBoolean(System.getProperty("selenide.saveScreenshots")));
         getConfig().reportsFolder(System.getProperty("selenide.reportsFolder"));
 
     }

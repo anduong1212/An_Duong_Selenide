@@ -16,7 +16,6 @@ public class TestBase {
     @Parameters({"locale"})
     public void setUp(String locale){
         SelenideConfiguration.configure();
-        Selenide.open();
         Selenide.open(Configuration.baseUrl);
         LocaleManager.loadLocale(locale);
 
