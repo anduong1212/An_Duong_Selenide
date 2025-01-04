@@ -1,0 +1,36 @@
+package enums;
+
+import common.LocaleManager;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public enum PassengerTypes {
+    ADULTS(LocaleManager.getLocalizedText("homepage.passenger.adults")),
+    CHILDREN(LocaleManager.getLocalizedText("homepage.passenger.childrens")),
+    INFANTS(LocaleManager.getLocalizedText("homepage.passenger.infants"));
+
+    private String passengerType;
+    private static final Map<String, PassengerTypes> textToEnum = new HashMap<>();
+
+    PassengerTypes(String passengerType){
+        this.passengerType = passengerType;
+    }
+
+    public String getDisplayName(){
+        return passengerType;
+    }
+
+    static {
+        for (PassengerTypes type : PassengerTypes.values()){
+            textToEnum.put(type.getDisplayName(), type);
+        }
+    }
+
+    public static PassengerTypes fromDisplayName(String displayName){
+        return textToEnum.get(displayName);
+    }
+
+
+
+}

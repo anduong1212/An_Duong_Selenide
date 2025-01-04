@@ -1,6 +1,8 @@
 package common;
 
-import java.time.LocalDate;
+import enums.Locales;
+
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ServiceLoader;
 
@@ -17,10 +19,12 @@ public class Utilities {
         }
     }
 
-    public static String getDateInPrior(LocalDate date, int days){
-        LocalDate futureDate = date.plusDays(days);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return futureDate.format(formatter);
+    public static String getDateInPrior(int daysToAdd){
+        LocalDateTime futureDateTime = LocalDateTime.now().plusDays(daysToAdd);
+        Locales selectedLocale = LocaleManager.getSelectedLocale();
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(selectedLocale.getLocaleDateFormat(), selectedLocale.getLocale());
+        return dateTimeFormatter.format(futureDateTime);
     }
 
     public static <T> T getService(Class<T> serviceInterface, String serviceName){

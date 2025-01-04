@@ -1,14 +1,14 @@
-package element;
+package common;
 
-import common.PropertyUtils;
-import enums.Locale;
+import enums.Locales;
 
 public class LocaleManager {
     public static PropertyUtils props = PropertyUtils.getInstance();
+    public static Locales selectedLanguage;
 
     public static void loadLocale(String locale){
-        Locale selectedLanguage = Locale.fromString(locale);
-        props.loadPropertiesFromFile("/src/test/resources/" + selectedLanguage.getFileName());
+        selectedLanguage = Locales.fromString(locale);
+        props.loadPropertiesFromFile("/src/test/resources/" + selectedLanguage.getLocaleCode() + "_locale.properties");
     }
 
     public static String getLocalizedText(String key){
@@ -17,6 +17,10 @@ public class LocaleManager {
         }
 
         return props.getPropertyValue(key);
+    }
+
+    public static Locales getSelectedLocale(){
+        return selectedLanguage != null ? selectedLanguage : Locales.EN;
     }
 
 

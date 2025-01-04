@@ -2,7 +2,8 @@ package pages.vietjet;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import element.LocaleManager;
+import common.LocaleManager;
+import enums.FlightDateTypes;
 
 
 import static com.codeborne.selenide.Selenide.$x;
@@ -15,8 +16,9 @@ public class HomePage extends BasePage {
     private final String optDestination = "//div[@id='panel1a-content']//div[text()='%s']";
     private final String radFlightType = "//img[@src='/static/media/switch.d8860013.svg']/parent::div/preceding-sibling::div//input[@type='radio'and@value='%s']";
     private final String btnPickingDateCalendar = "//div//p[text()='%s']";
-    private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'January 2025')]//span[text()='18']";
+    private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'%s')]//span[text()='%s']";
     private final String tblCalendar = "//div[@class='rdrCalendarWrapper rdrDateRangeWrapper']";
+    private final String btnPassenger = "//input[@id='input-base-custom-107']";
 
     public void selectFlightType(String flightType){
         $x(String.format(radFlightType, flightType)).click();
@@ -35,14 +37,18 @@ public class HomePage extends BasePage {
         $x(String.format(optDestination, arrivalDestination)).shouldBe(Condition.visible).click();
     }
 
-    public void selectDepartureDate(){
+    public void selectFlightDate(String dateTime, FlightDateTypes flightDateType){
+        String[] splitDateTime = dateTime.split(",");
+        String month = splitDateTime[0];
+        String year = splitDateTime[1];
+        String date = splitDateTime[2];
+
         if (!$x(tblCalendar).shouldBe(Condition.visible).isDisplayed()){
-            $x(String.format(btnPickingDateCalendar, LocaleManager.getLocalizedText("homepage.booking.departure.button")))
+            $x(String.format(btnPickingDateCalendar, flightDateType.getFlightDateType()))
                     .click();
         }
 
-        $x(btnDateOnCalendar).click();
-
+        $x(String.format(btnDateOnCalendar,month + " " + year, date)).click();
     }
 
     public void acceptCookie(){
