@@ -119,7 +119,7 @@ public class ReportListener implements TestLifecycleListener {
                 }
             }
         } catch (ClassNotFoundException e){
-            System.out.println(e.getException().toString());
+            throw new RuntimeException("Methods is not exist - " + e);
         }
 
         return Optional.empty();

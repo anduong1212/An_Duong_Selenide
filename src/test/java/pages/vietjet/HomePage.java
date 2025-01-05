@@ -3,7 +3,9 @@ package pages.vietjet;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import common.LocaleManager;
+import element.Elements;
 import enums.FlightDateTypes;
+import enums.PassengerTypes;
 
 
 import static com.codeborne.selenide.Selenide.$x;
@@ -19,6 +21,11 @@ public class HomePage extends BasePage {
     private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'%s')]//span[text()='%s']";
     private final String tblCalendar = "//div[@class='rdrCalendarWrapper rdrDateRangeWrapper']";
     private final String btnPassenger = "//input[@id='input-base-custom-107']";
+    private final String lblPassengerType = "//div/p[text()='%s']";
+    private final String lblPassengerQuantity = "//div//p[text()='%s']//ancestor::div/following-sibling::div/span[contains(@class, 'MuiTypography-root')]";
+    private final String btnDecreasePassengerQuantity =  "/preceding-sibling::button";
+    private final String btnIncreasePassengerQuantity = "/following-sibling::button";
+
 
     public void selectFlightType(String flightType){
         $x(String.format(radFlightType, flightType)).click();
@@ -27,14 +34,14 @@ public class HomePage extends BasePage {
         SelenideElement inputDepartDestination = $x(txtDepartDestinationInput);
         inputDepartDestination.click();
         inputDepartDestination.setValue(departDestination);
-        $x(String.format(optDestination, departDestination)).shouldBe(Condition.visible).click();
+        Elements.clickFormattedElement(optDestination, departDestination);
     }
 
     public void inputArrivalDestination(String arrivalDestination){
         SelenideElement inputArrivalDestination = $x(txtArrivalDestinationInput);
         inputArrivalDestination.click();
         inputArrivalDestination.setValue(arrivalDestination);
-        $x(String.format(optDestination, arrivalDestination)).shouldBe(Condition.visible).click();
+        Elements.clickFormattedElement(optDestination, arrivalDestination);
     }
 
     public void selectFlightDate(String dateTime, FlightDateTypes flightDateType){
@@ -47,17 +54,24 @@ public class HomePage extends BasePage {
             $x(String.format(btnPickingDateCalendar, flightDateType.getFlightDateType()))
                     .click();
         }
-
-        $x(String.format(btnDateOnCalendar,month + " " + year, date)).click();
+        Elements.clickFormattedElement(btnDateOnCalendar, month + " " + year, date);
     }
 
     public void acceptCookie(){
-        if($x(String.format(tltCookiePopupTitle,LocaleManager.getLocalizedText("homepage.popup.title.cookie")))
-                .shouldBe(Condition.visible)
-                .isDisplayed()){
+        if(Elements.isFormattedElementDisplayed(tltCookiePopupTitle, LocaleManager.getLocalizedText("homepage.popup.title.cookie"))){
             $x(btnAcceptCookie).click();
         }
+    }
 
+    public void inputPassengerQuantity(PassengerTypes passengerTypes, int quantity){
+        String formattedLblPassengerQuantity = String.format(lblPassengerQuantity, passengerTypes.getDisplayName());
+        if (!Elements.isFormattedElementDisplayed(lblPassengerType, passengerTypes.getDisplayName())){
+            $x(btnPassenger).click();
+        }
+
+        for (int i = 1; i <= quantity; i++){
+            Elements.clickFormattedElement(formattedLblPassengerQuantity + btnIncreasePassengerQuantity, passengerTypes.getDisplayName());
+        }
     }
 
 }

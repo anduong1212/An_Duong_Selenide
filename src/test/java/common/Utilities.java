@@ -11,14 +11,6 @@ public class Utilities {
         return System.getProperty("user.dir");
     }
 
-    public static void sleep(long timeOut) {
-        try {
-            Thread.sleep(timeOut);
-        } catch (Exception ex){
-            Log.error("Exception is sleep method - ERROR: " + ex);
-        }
-    }
-
     public static String getDateInPrior(int daysToAdd){
         LocalDateTime futureDateTime = LocalDateTime.now().plusDays(daysToAdd);
         Locales selectedLocale = LocaleManager.getSelectedLocale();
