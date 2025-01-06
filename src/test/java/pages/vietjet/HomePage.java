@@ -20,7 +20,7 @@ public class HomePage extends BasePage {
     private final String btnPickingDateCalendar = "//div//p[text()='%s']";
     private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'%s')]//span[text()='%s']";
     private final String tblCalendar = "//div[@class='rdrCalendarWrapper rdrDateRangeWrapper']";
-    private final String btnPassenger = "//input[@id='input-base-custom-107']";
+    private final String btnPassenger = "//div//input[contains(@id,'input-base-custom')]";
     private final String lblPassengerType = "//div/p[text()='%s']";
     private final String lblPassengerQuantity = "//div//p[text()='%s']//ancestor::div/following-sibling::div/span[contains(@class, 'MuiTypography-root')]";
     private final String btnDecreasePassengerQuantity =  "/preceding-sibling::button";
@@ -69,7 +69,7 @@ public class HomePage extends BasePage {
             $x(btnPassenger).click();
         }
 
-        for (int i = 1; i <= quantity; i++){
+        for (int i = 1; i < quantity; i++){
             Elements.clickFormattedElement(formattedLblPassengerQuantity + btnIncreasePassengerQuantity, passengerTypes.getDisplayName());
         }
     }
