@@ -23,17 +23,4 @@ public class SelenideConfiguration extends SelenideConfig {
         Configuration.screenshots = config.screenshots();
     }
 
-    public static void loadConfig(){
-        getConfig().browser(System.getProperty("selenide.browser"));
-        getConfig().baseUrl(System.getProperty("selenide.browser"));
-        getConfig().timeout(Long.parseLong(System.getProperty("selenide.timeout")));
-        getConfig().headless(Boolean.parseBoolean(System.getProperty("selenide.headless")));
-        getConfig().remote(System.getProperty("selenide.remote", ""));
-        getConfig().browserSize(System.getProperty("selenide.browserSize"));
-        getConfig().browserPosition(System.getProperty("selenide.browserPosition"));
-        getConfig().savePageSource(Boolean.parseBoolean(System.getProperty("selenide.savePageSource")));
-        getConfig().screenshots(Boolean.parseBoolean(System.getProperty("selenide.saveScreenshots")));
-        getConfig().reportsFolder(System.getProperty("selenide.reportsFolder"));
-
-    }
 }
