@@ -8,14 +8,14 @@ public class LocaleManager {
 
     public static void loadLocale(String locale){
         selectedLanguage = Locales.fromString(locale);
-        props.loadPropertiesFromFile("/src/test/resources/" + selectedLanguage.getLocaleCode() + "_locale.properties");
+        props.loadPropertiesFromFile("/src/test/resources/locale/" + selectedLanguage.getLocaleCode() + "_locale.properties");
+        Log.info("[LM] Locale loaded as: " + locale);
     }
 
     public static String getLocalizedText(String key){
         if (props == null){
             throw new IllegalArgumentException("You need to call loadLocale() before call this methods");
         }
-
         return props.getPropertyValue(key);
     }
 

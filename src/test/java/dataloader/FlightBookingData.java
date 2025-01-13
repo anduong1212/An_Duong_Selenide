@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public class FlightBookingData implements DataProvider<BookingInformation> {
 
-    private static final String FILE_PATH = "staging_data.json";
+    private static final String FILE_PATH = "data/staging_data.json";
 
     @Override
     public Stream<BookingInformation> provide() {

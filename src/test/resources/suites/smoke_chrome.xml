@@ -4,7 +4,6 @@
 
     <test name="VietJet Air Test_EN_locale">
         <parameter name="browser" value="chrome"/>
-        <parameter name="locale" value="EN"/>
         <classes>
             <class name="testcases.vietjet.HomePageTest">
                 <methods>
