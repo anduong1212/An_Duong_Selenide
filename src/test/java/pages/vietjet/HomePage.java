@@ -3,9 +3,12 @@ package pages.vietjet;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import common.LocaleManager;
+import common.Utilities;
+import dataobjects.BookingInformation;
 import element.Elements;
 import enums.FlightDateTypes;
 import enums.PassengerTypes;
+import io.qameta.allure.Step;
 
 
 import static com.codeborne.selenide.Selenide.$x;
@@ -25,6 +28,7 @@ public class HomePage extends BasePage {
     private final String lblPassengerQuantity = "//div//p[text()='%s']//ancestor::div/following-sibling::div/span[contains(@class, 'MuiTypography-root')]";
     private final String btnDecreasePassengerQuantity =  "/preceding-sibling::button";
     private final String btnIncreasePassengerQuantity = "/following-sibling::button";
+    private final String btnSearchFlight = "//div/button[contains(@class,'jss')]//span[text()=\"Let's go\"]";
 
 
     public void selectFlightType(String flightType){
@@ -57,6 +61,7 @@ public class HomePage extends BasePage {
         Elements.clickFormattedElement(btnDateOnCalendar, month + " " + year, date);
     }
 
+    @Step("Accept Cookie popup")
     public void acceptCookie(){
         if(Elements.isFormattedElementDisplayed(tltCookiePopupTitle, LocaleManager.getLocalizedText("homepage.popup.title.cookie"))){
             $x(btnAcceptCookie).click();
@@ -65,13 +70,44 @@ public class HomePage extends BasePage {
 
     public void inputPassengerQuantity(PassengerTypes passengerTypes, int quantity){
         String formattedLblPassengerQuantity = String.format(lblPassengerQuantity, passengerTypes.getDisplayName());
+
         if (!Elements.isFormattedElementDisplayed(lblPassengerType, passengerTypes.getDisplayName())){
             $x(btnPassenger).click();
         }
 
-        for (int i = 1; i < quantity; i++){
+        int defaultPassenger = Integer.parseInt($x(formattedLblPassengerQuantity).getText());
+
+        while (defaultPassenger < quantity){
             Elements.clickFormattedElement(formattedLblPassengerQuantity + btnIncreasePassengerQuantity, passengerTypes.getDisplayName());
+            defaultPassenger++;
         }
+    }
+
+    /**
+     * Search for a flight base on the given information such as Depart, Arrival, Flight Date, Passengers
+     *
+     * @param bookingInformation as information need to be searched on HomePage form
+     * @throws IllegalArgumentException if missing information or SelenideElement is unable to find
+     */
+    public void searchFlight(BookingInformation bookingInformation){
+        //Verify that there is a cookie popup appear and accept it
+        acceptCookie();
+
+        //Input the Depart Destination as Airport Code e.g. SGN
+        inputDepartDestination(bookingInformation.departDestination());
+
+        //Input the Arrival Destination as Airport Code e.g. HAN
+        inputArrivalDestination(bookingInformation.arrivalDestination());
+
+        //Picking the departure and arrival day as counting number days from current day
+        selectFlightDate(Utilities.getDateInPrior(1), FlightDateTypes.DEPART_DATE);
+        selectFlightDate(Utilities.getDateInPrior(4), FlightDateTypes.RETURN_DATE);
+
+        //Input the quantity of passenger
+        inputPassengerQuantity(PassengerTypes.ADULTS, bookingInformation.passenger().adults());
+
+        //Click search button
+        Elements.clickFormattedElement(btnSearchFlight, LocaleManager.getLocalizedText("homepage.booking.search"));
     }
 
 }

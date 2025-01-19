@@ -109,6 +109,14 @@
                     <configuration>
                         <reportVersion>${allure.version}</reportVersion>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>allure-report</id>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <!-- Maven Compiler Plugin -->

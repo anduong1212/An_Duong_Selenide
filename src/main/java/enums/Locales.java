@@ -3,9 +3,9 @@ package enums;
 import java.util.Locale;
 
 public enum Locales {
-    VN("VN", new Locale("vi","VN"), "'Tháng' M,yyyy,d"),
-    EN("EN", Locale.ENGLISH, "MMMM,yyyy,d"),
-    KO("KO", Locale.KOREA, "M'월',yyyy,d");
+    VN("vn", new Locale("vi","VN"), "'Tháng' M,yyyy,d"),
+    EN("en", Locale.ENGLISH, "MMMM,yyyy,d"),
+    KO("ko", Locale.KOREA, "M'월',yyyy,d");
 
     private final String localeCode;
     private final Locale locale;

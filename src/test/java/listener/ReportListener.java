@@ -132,5 +132,4 @@ public class ReportListener implements TestLifecycleListener {
                 .or(() -> context.getPassedTests().getAllResults().stream().filter(r -> r.getMethod().equals(testNGMethod)).findFirst());
     }
 
-
 }

@@ -11,7 +11,7 @@ public class Utilities {
         return System.getProperty("user.dir");
     }
 
-    public static String getDateInPrior(int daysToAdd){
+    public static String getDateInPrior(int daysToAdd) {
         LocalDateTime futureDateTime = LocalDateTime.now().plusDays(daysToAdd);
         Locales selectedLocale = LocaleManager.getSelectedLocale();
 
@@ -19,16 +19,4 @@ public class Utilities {
         return dateTimeFormatter.format(futureDateTime);
     }
 
-    public static <T> T getService(Class<T> serviceInterface, String serviceName){
-        return ServiceLoader.load(serviceInterface)
-                .stream()
-                .filter(provider -> provider.type().getSimpleName().toLowerCase()
-                        .startsWith(serviceName.toLowerCase()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        String.format("Unsupported service: %s\nPlease add a service provider to META-INF/services/%s",
-                                serviceName, serviceInterface.getName())))
-                .get();
-
-    }
 }

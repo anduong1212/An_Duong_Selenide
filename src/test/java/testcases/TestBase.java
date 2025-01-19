@@ -14,7 +14,6 @@ public class TestBase {
     @Parameters({"browser"})
     public void setUp(String browser){
         Configurations.configure(browser);
-
         Selenide.open(Configuration.baseUrl);
     }
 
