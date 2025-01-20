@@ -3,7 +3,6 @@
 <suite name="VietJetAir Smoke Suite">
 
     <test name="VietJet Air Test_EN_locale">
-        <parameter name="browser" value="chrome"/>
         <classes>
             <class name="testcases.vietjet.HomePageTest">
                 <methods>

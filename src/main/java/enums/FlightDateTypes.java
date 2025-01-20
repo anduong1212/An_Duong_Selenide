@@ -2,11 +2,15 @@ package enums;
 
 import common.LocaleManager;
 
+import java.util.ResourceBundle;
+
 public enum FlightDateTypes {
-    DEPART_DATE(LocaleManager.getLocalizedText("homepage.booking.departure.button")),
-    RETURN_DATE(LocaleManager.getLocalizedText("homepage.booking.return.button"));
+    DEPART_DATE(LocaleManager.getLocaleBundle("homepage").getString("homepage.booking.departure.button")),
+    RETURN_DATE(LocaleManager.getLocaleBundle("homepage").getString("homepage.booking.return.button"));
 
     private final String flightDateType;
+
+    private final LocaleManager localeManager = new LocaleManager();
 
     FlightDateTypes(String flightDateType){
         this.flightDateType = flightDateType;

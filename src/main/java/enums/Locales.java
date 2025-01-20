@@ -5,7 +5,7 @@ import java.util.Locale;
 public enum Locales {
     VN("vn", new Locale("vi","VN"), "'Tháng' M,yyyy,d"),
     EN("en", Locale.ENGLISH, "MMMM,yyyy,d"),
-    KO("ko", Locale.KOREA, "M'월',yyyy,d");
+    KO("ko  ", Locale.KOREA, "M'월',yyyy,d");
 
     private final String localeCode;
     private final Locale locale;

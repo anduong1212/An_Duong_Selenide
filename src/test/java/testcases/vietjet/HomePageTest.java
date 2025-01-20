@@ -12,6 +12,8 @@ import pages.vietjet.HomePage;
 import pages.vietjet.TravelOptionPage;
 import testcases.TestBase;
 
+import java.util.ResourceBundle;
+
 public class HomePageTest extends TestBase {
     HomePage homePage = new HomePage();
     TravelOptionPage travelOptionPage = new TravelOptionPage();
@@ -36,7 +38,8 @@ public class HomePageTest extends TestBase {
     }
 
     public static void main(String[] args) {
-        LocaleManager.loadLocale("en");
-        LocaleManager.getLocalizedText("homepage.booking.search");
+        LocaleManager.setLocale("en");
+        ResourceBundle bundle = LocaleManager.getLocaleBundle("homepage");
+        System.out.println(bundle.getString("homepage.booking.search"));
     }
 }

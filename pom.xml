@@ -47,6 +47,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.automatedowl/allure-environment-writer -->
+        <dependency>
+            <groupId>com.github.automatedowl</groupId>
+            <artifactId>allure-environment-writer</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -137,8 +144,7 @@
                     <version>3.1.2</version>
                     <configuration>
                         <suiteXmlFiles>
-                            <suiteXmlFile>src/test/resources/suites/smoke_chrome.xml</suiteXmlFile>
-                            <suiteXmlFile>src/test/resources/suites/smoke_edge.xml</suiteXmlFile>
+                            <suiteXmlFile>src/test/resources/suites/test_suite</suiteXmlFile>
                         </suiteXmlFiles>
                         <testFailureIgnore>true</testFailureIgnore>
                         <argLine>
@@ -166,7 +172,7 @@
                         <version>3.1.2</version>
                         <configuration>
                             <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/suites/smoke_chrome.xml</suiteXmlFile>
+                                <suiteXmlFile>src/test/resources/suites/test_suite.xml</suiteXmlFile>
                             </suiteXmlFiles>
 <!--                            <parallel>methods</parallel>-->
 <!--                            <threadCount>2</threadCount>-->

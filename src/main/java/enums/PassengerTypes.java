@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PassengerTypes {
-    ADULTS(LocaleManager.getLocalizedText("homepage.passenger.adults")),
-    CHILDREN(LocaleManager.getLocalizedText("homepage.passenger.childrens")),
-    INFANTS(LocaleManager.getLocalizedText("homepage.passenger.infants"));
+    ADULTS(LocaleManager.getLocaleBundle("homepage").getString("homepage.passenger.adults")),
+    CHILDREN(LocaleManager.getLocaleBundle("homepage").getString("homepage.passenger.childrens")),
+    INFANTS(LocaleManager.getLocaleBundle("homepage").getString("homepage.passenger.infants"));
 
     private String passengerType;
     private static final Map<String, PassengerTypes> textToEnum = new HashMap<>();

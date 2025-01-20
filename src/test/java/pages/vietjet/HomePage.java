@@ -11,6 +11,8 @@ import enums.PassengerTypes;
 import io.qameta.allure.Step;
 
 
+import java.util.ResourceBundle;
+
 import static com.codeborne.selenide.Selenide.$x;
 
 public class HomePage extends BasePage {
@@ -30,6 +32,7 @@ public class HomePage extends BasePage {
     private final String btnIncreasePassengerQuantity = "/following-sibling::button";
     private final String btnSearchFlight = "//div/button[contains(@class,'jss')]//span[text()=\"Let's go\"]";
 
+    private final ResourceBundle localeBundle = LocaleManager.getLocaleBundle("homepage");
 
     public void selectFlightType(String flightType){
         $x(String.format(radFlightType, flightType)).click();
@@ -63,7 +66,7 @@ public class HomePage extends BasePage {
 
     @Step("Accept Cookie popup")
     public void acceptCookie(){
-        if(Elements.isFormattedElementDisplayed(tltCookiePopupTitle, LocaleManager.getLocalizedText("homepage.popup.title.cookie"))){
+        if(Elements.isFormattedElementDisplayed(tltCookiePopupTitle, localeBundle.getString("homepage.popup.title.cookie"))){
             $x(btnAcceptCookie).click();
         }
     }
@@ -107,7 +110,7 @@ public class HomePage extends BasePage {
         inputPassengerQuantity(PassengerTypes.ADULTS, bookingInformation.passenger().adults());
 
         //Click search button
-        Elements.clickFormattedElement(btnSearchFlight, LocaleManager.getLocalizedText("homepage.booking.search"));
+        Elements.clickFormattedElement(btnSearchFlight, localeBundle.getString("homepage.booking.search"));
     }
 
 }
