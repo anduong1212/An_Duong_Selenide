@@ -1,7 +1,6 @@
 package testcases.vietjet;
 
 import com.codeborne.selenide.Selenide;
-import common.LocaleManager;
 import dataobjects.BookingInformation;
 import dataobjects.Passenger;
 import io.qameta.allure.Description;
@@ -11,8 +10,6 @@ import org.testng.annotations.Test;
 import pages.vietjet.HomePage;
 import pages.vietjet.TravelOptionPage;
 import testcases.TestBase;
-
-import java.util.ResourceBundle;
 
 public class HomePageTest extends TestBase {
     HomePage homePage = new HomePage();
@@ -28,7 +25,7 @@ public class HomePageTest extends TestBase {
         //Search For a ticket
         homePage.searchFlight(bookingInformation);
 
-        //Will be included
+        //Will be included on below method
         homePage.closePopupAds();
 
         //Picked the lowest prices
@@ -37,9 +34,4 @@ public class HomePageTest extends TestBase {
         Selenide.sleep(5000);
     }
 
-    public static void main(String[] args) {
-        LocaleManager.setLocale("en");
-        ResourceBundle bundle = LocaleManager.getLocaleBundle("homepage");
-        System.out.println(bundle.getString("homepage.booking.search"));
-    }
 }
