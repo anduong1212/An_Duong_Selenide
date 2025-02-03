@@ -12,12 +12,12 @@ public class JsonUtilities {
 
     public static <T> T readJsonData(String filePath, TypeReference<T> typeReference){
         try (InputStream inputStream = Objects.requireNonNull(JsonUtilities.class.getClassLoader().getResourceAsStream(filePath),
-                "Unable to find Json File from path" + filePath)) {
+                "[JSON UTIL] Unable to find Json File from path" + filePath)) {
 
             return mapper.readValue(inputStream, typeReference);
 
         } catch (IOException exception){
-            throw new RuntimeException("[JSON_UTILs] Error happens when reading Json file from: " +
+            throw new RuntimeException("[JSON UTIL] Error happens when reading Json file from: " +
                     filePath + " - " + exception.getMessage());
         }
     }

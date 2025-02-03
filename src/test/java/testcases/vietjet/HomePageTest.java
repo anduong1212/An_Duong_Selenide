@@ -1,37 +1,38 @@
 package testcases.vietjet;
 
-import com.codeborne.selenide.Selenide;
+import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
-import dataobjects.Passenger;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import listener.RetryAnalyzer;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.vietjet.HomePage;
 import pages.vietjet.TravelOptionPage;
 import testcases.TestBase;
 
+import java.util.Iterator;
+
 public class HomePageTest extends TestBase {
     HomePage homePage = new HomePage();
     TravelOptionPage travelOptionPage = new TravelOptionPage();
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "data_TC_01")
     @Description("Search and choose tickets on a specific day successfully")
-    @Owner("An.Duong-48288")
-    public void test2() {
-        Passenger passenger = new Passenger(2,0,0);
-        BookingInformation bookingInformation = new BookingInformation("SGN", "HAN", "NO", "NO", "return", passenger);
-
+    @Owner("An Duong - 48288")
+    public void TC_01(BookingInformation bookingInformation) {
         //Search For a ticket
         homePage.searchFlight(bookingInformation);
 
         //Will be included on below method
         homePage.closePopupAds();
+    }
 
-        //Picked the lowest prices
-        travelOptionPage.selectLowestTicket();
-
-        Selenide.sleep(5000);
+    @DataProvider(name = "data_TC_01")
+    public Iterator<Object[]> data_TC_01() {
+        return new FlightBookingData("TC_01").provide()
+                .map(bookingInformation -> new Object[]{bookingInformation})
+                .toList().iterator();
     }
 
 }

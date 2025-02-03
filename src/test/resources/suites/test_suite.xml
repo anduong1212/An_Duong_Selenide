@@ -6,7 +6,7 @@
         <classes>
             <class name="testcases.vietjet.HomePageTest">
                 <methods>
-                    <include name="test2"/>
+                    <include name="TC_01"/>
                 </methods>
             </class>
         </classes>
