@@ -103,8 +103,8 @@ public class HomePage extends BasePage {
         inputArrivalDestination(bookingInformation.arrivalDestination());
 
         //Picking the departure and arrival day as counting number days from current day
-        selectFlightDate(Utilities.getDateInPrior(1), FlightDateTypes.DEPART_DATE);
-        selectFlightDate(Utilities.getDateInPrior(4), FlightDateTypes.RETURN_DATE);
+        selectFlightDate(bookingInformation.departDate(), FlightDateTypes.DEPART_DATE);
+        selectFlightDate(bookingInformation.arrivalDate(), FlightDateTypes.RETURN_DATE);
 
         //Input the quantity of passenger
         inputPassengerQuantity(PassengerTypes.ADULTS, bookingInformation.passenger().adults());

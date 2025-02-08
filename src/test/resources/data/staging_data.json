@@ -2,8 +2,8 @@
   "TC_01":{
     "departDestination" : "SGN",
     "arrivalDestination" : "HAN",
-    "departDate" : "01/01/2025",
-    "arrivalDate" : "04/01/2025",
+    "departDate" : "<TODAY+1>",
+    "arrivalDate" : "<TODAY+3>",
     "flightType" : "return",
     "passenger" : {
       "adults" : 2,
