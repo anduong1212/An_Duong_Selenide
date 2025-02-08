@@ -3,17 +3,23 @@ package pages.vietjet;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import common.LocaleManager;
+import common.Log;
 import common.Utilities;
+import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
+import dataobjects.Passenger;
 import element.Elements;
 import enums.FlightDateTypes;
 import enums.PassengerTypes;
 import io.qameta.allure.Step;
 
 
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.switchTo;
 
 public class HomePage extends BasePage {
     private final String txtDepartDestinationInput = "//input[@class='MuiInputBase-input MuiOutlinedInput-input' and not(@id)]";
@@ -31,11 +37,16 @@ public class HomePage extends BasePage {
     private final String btnDecreasePassengerQuantity =  "/preceding-sibling::button";
     private final String btnIncreasePassengerQuantity = "/following-sibling::button";
     private final String btnSearchFlight = "//div/button[contains(@class,'jss')]//span[text()=\"Let's go\"]";
+    private final String panNotificationBanner = "//div[@id='st_notification_banner']";
+    private final String iframeNotificationBanner = "//iframe[@id='preview-notification-frame']";
 
     private final ResourceBundle localeBundle = LocaleManager.getLocaleBundle("homepage");
 
     public void selectFlightType(String flightType){
-        $x(String.format(radFlightType, flightType)).click();
+        SelenideElement radFlightType = $x(String.format(this.radFlightType, flightType));
+        if(!radFlightType.isSelected()){
+            radFlightType.click();
+        }
     }
     public void inputDepartDestination(String departDestination){
         SelenideElement inputDepartDestination = $x(txtDepartDestinationInput);
@@ -57,7 +68,7 @@ public class HomePage extends BasePage {
         String year = splitDateTime[1];
         String date = splitDateTime[2];
 
-        if (!$x(tblCalendar).shouldBe(Condition.visible).isDisplayed()){
+        if (!$x(tblCalendar).shouldBe(visible).isDisplayed()){
             $x(String.format(btnPickingDateCalendar, flightDateType.getFlightDateType()))
                     .click();
         }
@@ -71,19 +82,42 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void inputPassengerQuantity(PassengerTypes passengerTypes, int quantity){
+    public void inputPassengerQuantityByType(PassengerTypes passengerTypes, int quantity){
         String formattedLblPassengerQuantity = String.format(lblPassengerQuantity, passengerTypes.getDisplayName());
-
         if (!Elements.isFormattedElementDisplayed(lblPassengerType, passengerTypes.getDisplayName())){
             $x(btnPassenger).click();
         }
-
         int defaultPassenger = Integer.parseInt($x(formattedLblPassengerQuantity).getText());
-
         while (defaultPassenger < quantity){
             Elements.clickFormattedElement(formattedLblPassengerQuantity + btnIncreasePassengerQuantity, passengerTypes.getDisplayName());
             defaultPassenger++;
         }
+    }
+
+    public void inputPassengerQuantity(Passenger types){
+        //Convert the Passenger object to Map
+        Map<String, Integer> passengerMap = types.toMap();
+
+        //Iterate through the Passenger object and input the quantity
+        passengerMap.forEach((key, value) -> {
+            PassengerTypes passengerType = PassengerTypes.fromDisplayName(key);
+            Log.info("[HomePage] Inputting passenger quantity for " + passengerType.getDisplayName());
+            inputPassengerQuantityByType(passengerType, value);
+        });
+    }
+
+    public void closeNotificationBanner(){
+       if($x(panNotificationBanner).isDisplayed()){
+           switchTo().frame($x(iframeNotificationBanner));
+
+           SelenideElement btnCloseNotification = $x("//button[@id ='NC_CTA_TWO']");
+           if(btnCloseNotification.exists()){
+                btnCloseNotification.shouldBe(visible).click();
+           }
+           switchTo().defaultContent();
+       } else {
+           Log.info("Notification banner is not displayed");
+       }
     }
 
     /**
@@ -93,8 +127,14 @@ public class HomePage extends BasePage {
      * @throws IllegalArgumentException if missing information or SelenideElement is unable to find
      */
     public void searchFlight(BookingInformation bookingInformation){
-        //Verify that there is a cookie popup appear and accept it
+        //There is a cookie popup appear and accept it
         acceptCookie();
+
+        //Close the notification banner if it is displayed
+        closeNotificationBanner();
+
+        //Select the flight type
+        selectFlightType(bookingInformation.flightType());
 
         //Input the Depart Destination as Airport Code e.g. SGN
         inputDepartDestination(bookingInformation.departDestination());
@@ -107,10 +147,10 @@ public class HomePage extends BasePage {
         selectFlightDate(bookingInformation.arrivalDate(), FlightDateTypes.RETURN_DATE);
 
         //Input the quantity of passenger
-        inputPassengerQuantity(PassengerTypes.ADULTS, bookingInformation.passenger().adults());
-
+        inputPassengerQuantity(bookingInformation.passenger());
         //Click search button
         Elements.clickFormattedElement(btnSearchFlight, localeBundle.getString("homepage.booking.search"));
     }
+
 
 }

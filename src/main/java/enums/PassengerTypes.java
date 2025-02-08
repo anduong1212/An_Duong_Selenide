@@ -10,7 +10,7 @@ public enum PassengerTypes {
     CHILDREN(LocaleManager.getLocaleBundle("homepage").getString("homepage.passenger.childrens")),
     INFANTS(LocaleManager.getLocaleBundle("homepage").getString("homepage.passenger.infants"));
 
-    private String passengerType;
+    private final String passengerType;
     private static final Map<String, PassengerTypes> textToEnum = new HashMap<>();
 
     PassengerTypes(String passengerType){
@@ -28,7 +28,7 @@ public enum PassengerTypes {
     }
 
     public static PassengerTypes fromDisplayName(String displayName){
-        return textToEnum.get(displayName);
+        return textToEnum.get(displayName.substring(0,1).toUpperCase() + displayName.substring(1));
     }
 
 

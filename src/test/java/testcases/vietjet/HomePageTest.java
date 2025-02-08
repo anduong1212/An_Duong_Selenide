@@ -2,6 +2,8 @@ package testcases.vietjet;
 
 import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
+import dataobjects.Passenger;
+import enums.PassengerTypes;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import listener.RetryAnalyzer;
@@ -33,6 +35,15 @@ public class HomePageTest extends TestBase {
         return new FlightBookingData("TC_01").provide()
                 .map(bookingInformation -> new Object[]{bookingInformation})
                 .toList().iterator();
+    }
+
+    public static void main(String[] args) {
+        FlightBookingData data = new FlightBookingData("TC_01");
+        data.provide().forEach(BookingInformation -> {
+            BookingInformation.passenger().toMap().forEach((key, value) -> {
+                System.out.println(PassengerTypes.fromDisplayName(key).getDisplayName() + " " + value);
+            });
+        });
     }
 
 }

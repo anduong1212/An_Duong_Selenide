@@ -4,7 +4,7 @@
     "arrivalDestination" : "HAN",
     "departDate" : "<TODAY+1>",
     "arrivalDate" : "<TODAY+3>",
-    "flightType" : "return",
+    "flightType" : "roundTrip",
     "passenger" : {
       "adults" : 2,
       "childrens" : 0,
