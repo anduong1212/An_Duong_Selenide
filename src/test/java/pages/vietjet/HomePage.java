@@ -1,6 +1,7 @@
 package pages.vietjet;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.HighlightOptions;
 import com.codeborne.selenide.SelenideElement;
 import common.LocaleManager;
 import common.Log;
@@ -37,10 +38,13 @@ public class HomePage extends BasePage {
     private final String btnDecreasePassengerQuantity =  "/preceding-sibling::button";
     private final String btnIncreasePassengerQuantity = "/following-sibling::button";
     private final String btnSearchFlight = "//div/button[contains(@class,'jss')]//span[text()=\"Let's go\"]";
-    private final String panNotificationBanner = "//div[@id='st_notification_banner']";
-    private final String iframeNotificationBanner = "//iframe[@id='preview-notification-frame']";
+
 
     private final ResourceBundle localeBundle = LocaleManager.getLocaleBundle("homepage");
+    public HomePage(){
+        super();
+        logger.info("Initializing HomePage...");
+    }
 
     public void selectFlightType(String flightType){
         SelenideElement radFlightType = $x(String.format(this.radFlightType, flightType));
@@ -101,24 +105,11 @@ public class HomePage extends BasePage {
         //Iterate through the Passenger object and input the quantity
         passengerMap.forEach((key, value) -> {
             PassengerTypes passengerType = PassengerTypes.fromDisplayName(key);
-            Log.info("[HomePage] Inputting passenger quantity for " + passengerType.getDisplayName());
+            logger.info("Inputting passenger quantity for {}", passengerType.getDisplayName());
             inputPassengerQuantityByType(passengerType, value);
         });
     }
 
-    public void closeNotificationBanner(){
-       if($x(panNotificationBanner).isDisplayed()){
-           switchTo().frame($x(iframeNotificationBanner));
-
-           SelenideElement btnCloseNotification = $x("//button[@id ='NC_CTA_TWO']");
-           if(btnCloseNotification.exists()){
-                btnCloseNotification.shouldBe(visible).click();
-           }
-           switchTo().defaultContent();
-       } else {
-           Log.info("Notification banner is not displayed");
-       }
-    }
 
     /**
      * Search for a flight base on the given information such as Depart, Arrival, Flight Date, Passengers

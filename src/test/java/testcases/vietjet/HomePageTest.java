@@ -28,6 +28,9 @@ public class HomePageTest extends TestBase {
 
         //Will be included on below method
         homePage.closePopupAds();
+
+        //Choose ticket
+        travelOptionPage.selectLowestPrice();
     }
 
     @DataProvider(name = "data_TC_01")
