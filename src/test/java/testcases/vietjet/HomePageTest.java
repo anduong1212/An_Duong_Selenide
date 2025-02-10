@@ -26,11 +26,8 @@ public class HomePageTest extends TestBase {
         //Search For a ticket
         homePage.searchFlight(bookingInformation);
 
-        //Will be included on below method
-        homePage.closePopupAds();
-
         //Choose ticket
-        travelOptionPage.selectLowestPrice();
+        travelOptionPage.selectTicketsForFlight(bookingInformation.flightType());
     }
 
     @DataProvider(name = "data_TC_01")
@@ -38,15 +35,6 @@ public class HomePageTest extends TestBase {
         return new FlightBookingData("TC_01").provide()
                 .map(bookingInformation -> new Object[]{bookingInformation})
                 .toList().iterator();
-    }
-
-    public static void main(String[] args) {
-        FlightBookingData data = new FlightBookingData("TC_01");
-        data.provide().forEach(BookingInformation -> {
-            BookingInformation.passenger().toMap().forEach((key, value) -> {
-                System.out.println(PassengerTypes.fromDisplayName(key).getDisplayName() + " " + value);
-            });
-        });
     }
 
 }

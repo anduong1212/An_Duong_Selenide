@@ -6,9 +6,11 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
 import java.time.Duration;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.exist;
@@ -21,6 +23,7 @@ public class TravelOptionPage extends BasePage {
     private final Supplier<SelenideElement> vjFlightIconElement = () -> $x("//img[@alt='vietjet flight']");
     private final Supplier<SelenideElement> continueButton = () -> $("button.MuiButton-contained");
     private static final String lblPriceElementFormat = "(//p[contains(@class, 'MuiTypography-h4')])[%d]";
+    private static final int MAX_SCROLL_ATTEMPT = Integer.parseInt(System.getProperty("max.scroll.attempt", "20"));
 
     public TravelOptionPage() {
         super();
@@ -28,23 +31,18 @@ public class TravelOptionPage extends BasePage {
     }
 
     @Step("Wait for ticket price options")
-    public void waitForTicketPriceOptions() {
+    private void waitForTicketPriceOptions() {
         ticketPriceElements.get().shouldBe(sizeGreaterThan(0), Duration.ofSeconds(Configuration.timeout));
         logger.info("Ticket price options are loaded successfully");
     }
 
-    public void selectLowestPrice() {
-        waitForTicketPriceOptions();
-        logger.info("Selecting the lowest price");
-        getSuggestedPrice().
-                ifPresentOrElse(this::selectTicketByPrice, () -> {
-                    logger.warn("[Travel Option Page] No suggested price available");
-                });
-    }
-
-    //Optional is a container object which may or may not contain a non-null value.
-    // If a value is present, isPresent() will return true and get() will return the value.
-    public Optional<String> getSuggestedPrice() {
+    /**
+     * Get the suggested price from the page
+     * If the price is not available, return an empty Optional
+     * @return Optional<String> suggested price
+     */
+    @Step("Get suggested price")
+    private Optional<String> getSuggestedPrice() {
         currentLowestPriceElements.get().shouldBe(sizeGreaterThan(0), Duration.ofSeconds(Configuration.timeout));
         String suggestedPrice = String.join("", currentLowestPriceElements.get().texts());
         String formattedPrice = formatPrice(suggestedPrice);
@@ -55,61 +53,79 @@ public class TravelOptionPage extends BasePage {
             logger.warn("Suggested price is not available");
             return Optional.empty();
         }
-
     }
 
-    public void selectTicketByPrice(String suggestedPrice) {
-        logger.info("[Travel Option Page] Selecting ticket by price: {}", suggestedPrice);
-        scrollAndFindTicketByPrice(suggestedPrice)
-                .ifPresentOrElse(this::clickPriceElement, () -> {
-                    logger.warn("[Travel Option Page] Ticket with price {} not found", suggestedPrice);
-                });
+    /**
+     * Find the suggested price in the current DOM, which show on the current view
+     * @param suggestedPrice the price to find
+     * @return Optional<SelenideElement> the ticket element
+     */
+    private Optional<SelenideElement> findTicketByPrice(String suggestedPrice, String flightLeg) {
+        ElementsCollection priceElements = ticketPriceElements.get();
+        priceElements.shouldBe(sizeGreaterThan(0));
 
+        List<String> allPrices = priceElements.texts().stream()
+                .map(this::formatPrice)
+                .toList();
+        logger.info("Attempt {} - Found {} new prices for {} flight leg: {} ", getScrollAttemptCounter(), allPrices.size(), flightLeg ,allPrices);
+
+        //Iterate through all the prices and find the element with the suggested price
+        return IntStream.range(0, allPrices.size())  //Create IntStream from 0 to allPrices.size()
+                .mapToObj(index -> {          //Convert IntStream to Stream<IndexedPrice> (index, price) is index-value
+                    String price = allPrices.get(index);  // Get current index
+                    return new AbstractMap.SimpleEntry<>(index, price);  //Return the index and price as a pair
+                })
+                .filter(indexedPrice -> indexedPrice.getValue().equals(suggestedPrice))  //Filter the pair with the suggested price
+                .map(indexPrice -> {         //Map: convert index-value to SelenideElement
+                    SelenideElement element = $x(String.format(lblPriceElementFormat, indexPrice.getKey() + 1))
+                            .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}");
+                    logger.info("Found and returning price element with price '{}' for flight leg '{}'", suggestedPrice, flightLeg);
+                    return element;
+                })
+                .findFirst(); //Return the first element found if not return empty Optional
     }
 
-    private Optional<SelenideElement> scrollAndFindTicketByPrice(String suggestedPrice) {
-        int maxScroll = 20;
-        for (int i = 0; i < maxScroll; i++) {
-            logger.info("Scroll attempt {}/{}", i + 1, maxScroll);
-            Optional<SelenideElement> priceElement = findTicketByPrice(suggestedPrice);
+    /**
+     * Scroll and find the ticket with the suggested price
+     * If the price is not found after MAX_SCROLL_ATTEMPT, return an empty Optional
+     * @param suggestedPrice the price to find
+     * @return Optional<SelenideElement> the ticket element
+     */
+    @Step("Scroll and find ticket with suggested price")
+    private Optional<SelenideElement> scrollAndFindTicketByPrice(String suggestedPrice, String flightLeg) {
+        for (int i = 0; i < MAX_SCROLL_ATTEMPT; i++) {
+            logger.info("Scroll attempt {}/{} for {} flight leg", i + 1, MAX_SCROLL_ATTEMPT, flightLeg);
+            Optional<SelenideElement> priceElement = findTicketByPrice(suggestedPrice, flightLeg);
             if (priceElement.isPresent()) {
                 return priceElement;
             }
             scrollToBottom();
         }
+        logger.warn("Target price '{}' not found after {} scroll attempts.", suggestedPrice, MAX_SCROLL_ATTEMPT);
         return Optional.empty();
     }
 
-    private Optional<SelenideElement> findTicketByPrice(String suggestedPrice) {
-        ElementsCollection priceElements = ticketPriceElements.get();
-        priceElements.shouldBe(sizeGreaterThan(0));
-        List<String> allPrices = priceElements.texts().stream()
-                .map(this::formatPrice)
-                .toList();
-        logger.info("Attempt {} - Found {} new prices: {} ", getScrollAttemptCounter(), allPrices.size(), allPrices);
-
-        for (int i = 0; i < allPrices.size(); i++) {
-            if (allPrices.get(i).equals(suggestedPrice)) {
-                SelenideElement element = $x(String.format(lblPriceElementFormat, i + 1))
-                        .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}");
-                logger.info("Found and returning price element with price: {}", suggestedPrice);
-                return Optional.of(priceElements.get(i));
-            }
-        }
-
-        logger.info("Suggested price {} not found", suggestedPrice);
-        return Optional.empty();
+    /**
+     * Select the ticket with the given price
+     */
+    private void selectTicketByPrice(String suggestedPrice, String flightLeg) {
+        logger.info("[Travel Option Page] Selecting ticket by price: {}", suggestedPrice);
+        scrollAndFindTicketByPrice(suggestedPrice, flightLeg)
+                .ifPresentOrElse(priceElement -> clickPriceElement(priceElement, flightLeg), () -> {
+                    logger.warn("[Travel Option Page] Ticket with price {} not found", suggestedPrice);
+                });
     }
 
-    private void clickPriceElement(SelenideElement priceElement) {
+    @Step("Click on the price element")
+    private void clickPriceElement(SelenideElement priceElement, String flightLeg) {
         logger.info("Selecting ticket with price element: {}", priceElement.getText());
         priceElement.click();
-        logger.info("Clicked on the price element");
+        logger.info("Clicked on price element for {} flight leg.", flightLeg);
         selectContinue();
     }
 
     @Step("Select 'Continue' button")
-    public void selectContinue() {
+    private void selectContinue() {
         logger.info("Selecting 'Continue' button.");
         continueButton.get().shouldBe(visible).click();
     }
@@ -120,6 +136,36 @@ public class TravelOptionPage extends BasePage {
         vjFlightIconElement.get().shouldBe(exist).scrollTo();
     }
 
+    @Step("Select the lowest price for {flightLeg}")
+    private void selectLowestPrice(String flightLeg) {
+        waitForTicketPriceOptions();
+        logger.info("Selecting the lowest price");
+        getSuggestedPrice().
+                ifPresentOrElse(lowestPrice -> selectTicketByPrice(lowestPrice, flightLeg), () -> {
+                    logger.warn("[Travel Option Page] No suggested price available");
+                });
+    }
+
+    /**
+     * Select tickets for the given flight type
+     */
+    @Step("Choose tickets for {flightType} flight") // Dynamic step name using String Templates (Java 21)
+    public void selectTicketsForFlight(String flightType) { // Methods selectTicketsForFlight receive flightType as parameter
+        closePopupAds(); // Close popup ads
+
+        logger.info("Selecting tickets for {} flight.", flightType);
+        if ("roundTrip".equalsIgnoreCase(flightType)) {
+            logger.info("Selecting tickets for both departure and arrival for return flight.");
+            selectLowestPrice("departure"); // Indicate departure flight
+            selectLowestPrice("arrival");   // Indicate arrival flight
+        } else if ("oneway".equalsIgnoreCase(flightType)) {
+            logger.info("Selecting ticket for oneway flight.");
+            selectLowestPrice("oneway");      // Indicate oneway flight
+        } else {
+            logger.warn("Unknown flight type: {}. Selecting ticket as if it's oneway.", flightType);
+            selectLowestPrice("unknown"); // Handle unknown type gracefully
+        }
+    }
 
     private String formatPrice(String priceText) {
         if (priceText == null || priceText.isEmpty()) {

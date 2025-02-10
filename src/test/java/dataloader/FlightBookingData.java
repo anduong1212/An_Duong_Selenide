@@ -3,7 +3,7 @@ package dataloader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import common.JsonUtilities;
 import common.Utilities;
-import dataobjects.AirportLocalesMap;
+import dataobjects.LocalizedICAOCode;
 import dataobjects.BookingInformation;
 import dataprovider.DataProvider;
 
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public class FlightBookingData implements DataProvider<BookingInformation> {
 
     private static final String FILE_PATH = "data/staging_data.json";
-    private final Map<String, AirportLocalesMap.AirportDetails> airportDetailsMap = new AirportMapData().provide().findFirst().orElse(null);
+    private final Map<String, LocalizedICAOCode.AirportDetails> airportDetailsMap = new AirportMapData().provide().findFirst().orElse(null);
     private final String testCaseName;
 
     /**
@@ -57,7 +57,7 @@ public class FlightBookingData implements DataProvider<BookingInformation> {
     }
 
     private String getLocaleName(String airportCode, String locale) {
-        AirportLocalesMap.AirportDetails details = airportDetailsMap.get(airportCode);
+        LocalizedICAOCode.AirportDetails details = airportDetailsMap.get(airportCode);
         if (details != null){
             return "vi".equals(locale) ? details.vi() : details.en();
         }

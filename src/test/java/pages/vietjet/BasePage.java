@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import common.Log;
+import io.qameta.allure.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +25,16 @@ public abstract class BasePage {
         logger.debug("Initializing Base Page for class {}", getClass().getName());
     }
 
+    @Step("Close popup ads")
     public void closePopupAds(){
         if ($x(popupAds).shouldBe(Condition.visible, Duration.ofSeconds(Configuration.timeout)).isDisplayed()){
             $x(btnCloseBusinessAvailableAds).click();
+        } else {
+            Log.info("[Base Page] Ads popup banner is not displayed");
         }
     }
 
+    @Step("Close notification banner")
     public void closeNotificationBanner(){
         if($x(panNotificationBanner).isDisplayed()){
             switchTo().frame($x(iframeNotificationBanner));

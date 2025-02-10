@@ -46,12 +46,15 @@ public class HomePage extends BasePage {
         logger.info("Initializing HomePage...");
     }
 
+    @Step("Selecting {flightType} flight type")
     public void selectFlightType(String flightType){
         SelenideElement radFlightType = $x(String.format(this.radFlightType, flightType));
         if(!radFlightType.isSelected()){
             radFlightType.click();
         }
     }
+
+    @Step("Input Depart Destination as {departDestination}")
     public void inputDepartDestination(String departDestination){
         SelenideElement inputDepartDestination = $x(txtDepartDestinationInput);
         inputDepartDestination.click();
@@ -59,6 +62,7 @@ public class HomePage extends BasePage {
         Elements.clickFormattedElement(optDestination, departDestination);
     }
 
+    @Step("Input Arrival Destination as {arrivalDestination}")
     public void inputArrivalDestination(String arrivalDestination){
         SelenideElement inputArrivalDestination = $x(txtArrivalDestinationInput);
         inputArrivalDestination.click();
@@ -66,6 +70,7 @@ public class HomePage extends BasePage {
         Elements.clickFormattedElement(optDestination, arrivalDestination);
     }
 
+    @Step("Selecting {flightDateType} date as {dateTime}")
     public void selectFlightDate(String dateTime, FlightDateTypes flightDateType){
         String[] splitDateTime = dateTime.split(",");
         String month = splitDateTime[0];
@@ -98,6 +103,7 @@ public class HomePage extends BasePage {
         }
     }
 
+    @Step("Input passenger quantity")
     public void inputPassengerQuantity(Passenger types){
         //Convert the Passenger object to Map
         Map<String, Integer> passengerMap = types.toMap();
@@ -117,6 +123,7 @@ public class HomePage extends BasePage {
      * @param bookingInformation as information need to be searched on HomePage form
      * @throws IllegalArgumentException if missing information or SelenideElement is unable to find
      */
+    @Step("Search for a flight with {bookingInformation}")
     public void searchFlight(BookingInformation bookingInformation){
         //There is a cookie popup appear and accept it
         acceptCookie();
