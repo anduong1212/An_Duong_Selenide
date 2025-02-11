@@ -22,6 +22,7 @@ public class TravelOptionPage extends BasePage {
     private final Supplier<ElementsCollection> currentLowestPriceElements = () -> $$("div.slick-current p.MuiTypography-subtitle1 span");
     private final Supplier<SelenideElement> vjFlightIconElement = () -> $x("//img[@alt='vietjet flight']");
     private final Supplier<SelenideElement> continueButton = () -> $("button.MuiButton-contained");
+
     private static final String lblPriceElementFormat = "(//p[contains(@class, 'MuiTypography-h4')])[%d]";
     private static final int MAX_SCROLL_ATTEMPT = Integer.parseInt(System.getProperty("max.scroll.attempt", "20"));
 

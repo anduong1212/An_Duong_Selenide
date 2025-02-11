@@ -6,7 +6,7 @@
     "arrivalDate" : "<TODAY+3>",
     "flightType" : "roundTrip",
     "passenger" : {
-      "adults" : 2,
+      "adults" : 3,
       "childrens" : 0,
       "infants" : 0
     }

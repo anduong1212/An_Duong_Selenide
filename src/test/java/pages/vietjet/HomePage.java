@@ -121,10 +121,8 @@ public class HomePage extends BasePage {
         Elements.clickFormattedElement(btnSearchFlight, localeBundle.getString("homepage.booking.search"));
     }
 
-
     /**
      * Search for a flight base on the given information such as Depart, Arrival, Flight Date, Passengers
-     *
      * @param bookingInformation as information need to be searched on HomePage form
      * @throws IllegalArgumentException if missing information or SelenideElement is unable to find
      */
