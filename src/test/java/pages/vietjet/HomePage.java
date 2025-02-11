@@ -103,7 +103,7 @@ public class HomePage extends BasePage {
         }
     }
 
-    @Step("Input passenger quantity")
+    @Step("Input passenger quantity for {types}")
     public void inputPassengerQuantity(Passenger types){
         //Convert the Passenger object to Map
         Map<String, Integer> passengerMap = types.toMap();
@@ -114,6 +114,11 @@ public class HomePage extends BasePage {
             logger.info("Inputting passenger quantity for {}", passengerType.getDisplayName());
             inputPassengerQuantityByType(passengerType, value);
         });
+    }
+
+    @Step("Click search flight button")
+    private void clickSearchFlightButton(){
+        Elements.clickFormattedElement(btnSearchFlight, localeBundle.getString("homepage.booking.search"));
     }
 
 
@@ -146,8 +151,9 @@ public class HomePage extends BasePage {
 
         //Input the quantity of passenger
         inputPassengerQuantity(bookingInformation.passenger());
+
         //Click search button
-        Elements.clickFormattedElement(btnSearchFlight, localeBundle.getString("homepage.booking.search"));
+        clickSearchFlightButton();
     }
 
 

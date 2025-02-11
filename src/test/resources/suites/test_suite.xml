@@ -4,7 +4,7 @@
 
     <test name="VietJet Air Test_EN_locale">
         <classes>
-            <class name="testcases.vietjet.HomePageTest">
+            <class name="testcases.vietjet.BookingTicket">
                 <methods>
                     <include name="TC_01"/>
                 </methods>

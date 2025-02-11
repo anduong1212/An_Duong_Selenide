@@ -2,22 +2,22 @@ package testcases.vietjet;
 
 import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
-import dataobjects.Passenger;
-import enums.PassengerTypes;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import listener.RetryAnalyzer;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.vietjet.HomePage;
+import pages.vietjet.PassengerInfoPage;
 import pages.vietjet.TravelOptionPage;
 import testcases.TestBase;
 
 import java.util.Iterator;
 
-public class HomePageTest extends TestBase {
+public class BookingTicket extends TestBase {
     HomePage homePage = new HomePage();
     TravelOptionPage travelOptionPage = new TravelOptionPage();
+    PassengerInfoPage passengerInfoPage = new PassengerInfoPage();
 
     @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "data_TC_01")
     @Description("Search and choose tickets on a specific day successfully")
@@ -25,9 +25,10 @@ public class HomePageTest extends TestBase {
     public void TC_01(BookingInformation bookingInformation) {
         //Search For a ticket
         homePage.searchFlight(bookingInformation);
-
         //Choose ticket
         travelOptionPage.selectTicketsForFlight(bookingInformation.flightType());
+        //Verify the Passenger Info Form is displayed
+        passengerInfoPage.verifyPassengerInfoFormIsDisplayed();
     }
 
     @DataProvider(name = "data_TC_01")
