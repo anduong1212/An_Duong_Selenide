@@ -3,6 +3,7 @@ package pages.vietjet;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import dataobjects.BookingInformation;
 import io.qameta.allure.Step;
 
 import java.time.Duration;
@@ -151,8 +152,10 @@ public class TravelOptionPage extends BasePage {
      * Select tickets for the given flight type
      */
     @Step("Choose tickets for {flightType} flight") // Dynamic step name using String Templates (Java 21)
-    public void selectTicketsForFlight(String flightType) { // Methods selectTicketsForFlight receive flightType as parameter
+    public void selectTicketsForFlight(BookingInformation information) { // Methods selectTicketsForFlight receive flightType as parameter
         closePopupAds(); // Close popup ads
+
+        String flightType = information.flightType();
 
         logger.info("Selecting tickets for {} flight.", flightType);
         if ("roundTrip".equalsIgnoreCase(flightType)) {

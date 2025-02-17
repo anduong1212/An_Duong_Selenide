@@ -1,6 +1,6 @@
 package common;
 
-import enums.Locales;
+import enums.vietjet.Locales;
 import lombok.Getter;
 
 import java.util.ResourceBundle;

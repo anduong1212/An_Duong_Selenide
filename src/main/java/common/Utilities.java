@@ -1,6 +1,6 @@
 package common;
 
-import enums.Locales;
+import enums.vietjet.Locales;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,13 +16,6 @@ public class Utilities {
     public static final Pattern DATEPLACEHOLDER_PATTERN = Pattern.compile("<TODAY([+-]?\\d*)>");
     public static final Locales selectedLocale = LocaleManager.getSelectedLocale();
 
-
-    public static String getDateInPrior(int daysToAdd) {
-        LocalDateTime futureDateTime = LocalDateTime.now().plusDays(daysToAdd);
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(selectedLocale.getLocaleDateFormat(), selectedLocale.getLocale());
-        return dateTimeFormatter.format(futureDateTime);
-    }
 
     public static String resolveDatePlaceholders(String dateString) {
         Matcher matcher = DATEPLACEHOLDER_PATTERN.matcher(dateString);

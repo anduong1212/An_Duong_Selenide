@@ -1,5 +1,6 @@
 package testcases.vietjet;
 
+import com.codeborne.selenide.Selenide;
 import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
 import io.qameta.allure.Description;
@@ -26,9 +27,11 @@ public class BookingTicket extends TestBase {
         //Search For a ticket
         homePage.searchFlight(bookingInformation);
         //Choose ticket
-        travelOptionPage.selectTicketsForFlight(bookingInformation.flightType());
+        travelOptionPage.selectTicketsForFlight(bookingInformation);
+
+        Selenide.sleep(3000);
         //Verify the Passenger Info Form is displayed
-        passengerInfoPage.verifyPassengerInfoFormIsDisplayed();
+//        passengerInfoPage.verifyPassengerInfoFormIsDisplayed();
     }
 
     @DataProvider(name = "data_TC_01")

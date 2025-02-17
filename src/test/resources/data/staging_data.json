@@ -3,7 +3,7 @@
     "departDestination" : "SGN",
     "arrivalDestination" : "HAN",
     "departDate" : "<TODAY+1>",
-    "arrivalDate" : "<TODAY+3>",
+    "arrivalDate" : "<TODAY+100>",
     "flightType" : "roundTrip",
     "passenger" : {
       "adults" : 3,

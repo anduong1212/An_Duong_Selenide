@@ -1,4 +1,4 @@
-package enums;
+package enums.vietjet;
 
 import java.util.Locale;
 

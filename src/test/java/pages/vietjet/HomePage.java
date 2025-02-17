@@ -1,26 +1,23 @@
 package pages.vietjet;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.HighlightOptions;
 import com.codeborne.selenide.SelenideElement;
 import common.LocaleManager;
-import common.Log;
-import common.Utilities;
-import dataloader.FlightBookingData;
 import dataobjects.BookingInformation;
 import dataobjects.Passenger;
 import element.Elements;
-import enums.FlightDateTypes;
-import enums.PassengerTypes;
+import element.control.DatePicker;
+import element.control.factories.DatePickerFactories;
+import enums.vietjet.FlightDateTypes;
+import enums.vietjet.PassengerTypes;
 import io.qameta.allure.Step;
 
 
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.switchTo;
 
 public class HomePage extends BasePage {
     private final String txtDepartDestinationInput = "//input[@class='MuiInputBase-input MuiOutlinedInput-input' and not(@id)]";
@@ -29,8 +26,6 @@ public class HomePage extends BasePage {
     private final String tltCookiePopupTitle = "//div[@id='popup-dialog-description']//span[text()='%s']";
     private final String optDestination = "//div[@id='panel1a-content']//div[text()='%s']";
     private final String radFlightType = "//img[@src='/static/media/switch.d8860013.svg']/parent::div/preceding-sibling::div//input[@type='radio'and@value='%s']";
-    private final String btnPickingDateCalendar = "//div//p[text()='%s']";
-    private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'%s')]//span[text()='%s']";
     private final String tblCalendar = "//div[@class='rdrCalendarWrapper rdrDateRangeWrapper']";
     private final String btnPassenger = "//div//input[contains(@id,'input-base-custom')]";
     private final String lblPassengerType = "//div/p[text()='%s']";
@@ -39,11 +34,17 @@ public class HomePage extends BasePage {
     private final String btnIncreasePassengerQuantity = "/following-sibling::button";
     private final String btnSearchFlight = "//div/button[contains(@class,'jss')]//span[text()=\"Let's go\"]";
 
+    private final String btnPickingDateCalendar = "//div//p[text()='%s']";
+    private final String btnDateOnCalendar = "//div[@class='rdrMonth' and contains(div,'%s')]//span[text()='%s']";
+
+    private final DatePicker picker;
+
 
     private final ResourceBundle localeBundle = LocaleManager.getLocaleBundle("homepage");
     public HomePage(){
         super();
         logger.info("Initializing HomePage...");
+        picker = DatePickerFactories.createDatePicker($x(tblCalendar), "VietJet");
     }
 
     @Step("Selecting {flightType} flight type")
@@ -71,17 +72,24 @@ public class HomePage extends BasePage {
     }
 
     @Step("Selecting {flightDateType} date as {dateTime}")
-    public void selectFlightDate(String dateTime, FlightDateTypes flightDateType){
-        String[] splitDateTime = dateTime.split(",");
-        String month = splitDateTime[0];
-        String year = splitDateTime[1];
-        String date = splitDateTime[2];
+    public void selectFlightDate(BookingInformation bookingInformation){
 
-        if (!$x(tblCalendar).shouldBe(visible).isDisplayed()){
-            $x(String.format(btnPickingDateCalendar, flightDateType.getFlightDateType()))
-                    .click();
+        String departDate = bookingInformation.departDate();
+        String arrivalDate = bookingInformation.arrivalDate();
+        String flightType = bookingInformation.flightType();
+
+        logger.info("Selecting tickets for {} flight.", flightType);
+        if ("roundTrip".equalsIgnoreCase(flightType)) {
+            logger.info("Selecting tickets for both departure and arrival for return flight.");
+            picker.selectDate(departDate, FlightDateTypes.DEPART_DATE.getFlightDateType()); // Indicate departure flight
+            picker.selectDate(arrivalDate, FlightDateTypes.RETURN_DATE.getFlightDateType());   // Indicate arrival flight
+        } else if ("oneway".equalsIgnoreCase(flightType)) {
+            logger.info("Selecting ticket for oneway flight.");
+            picker.selectDate(departDate, FlightDateTypes.DEPART_DATE.getFlightDateType());      // Indicate oneway flight
+        } else {
+            logger.warn("Unknown flight type: {}. Selecting ticket as if it's oneway.", flightType);
+            picker.selectDate(departDate, FlightDateTypes.DEPART_DATE.getFlightDateType()); // Handle unknown type gracefully
         }
-        Elements.clickFormattedElement(btnDateOnCalendar, month + " " + year, date);
     }
 
     @Step("Accept Cookie popup")
@@ -93,13 +101,14 @@ public class HomePage extends BasePage {
 
     public void inputPassengerQuantityByType(PassengerTypes passengerTypes, int quantity){
         String formattedLblPassengerQuantity = String.format(lblPassengerQuantity, passengerTypes.getDisplayName());
+        Supplier<SelenideElement> passengerQuantity = () -> $x(formattedLblPassengerQuantity);
         if (!Elements.isFormattedElementDisplayed(lblPassengerType, passengerTypes.getDisplayName())){
             $x(btnPassenger).click();
         }
-        int defaultPassenger = Integer.parseInt($x(formattedLblPassengerQuantity).getText());
-        while (defaultPassenger < quantity){
+        int currentPassengerValue = Integer.parseInt(passengerQuantity.get().getText());
+        while (currentPassengerValue != quantity){
             Elements.clickFormattedElement(formattedLblPassengerQuantity + btnIncreasePassengerQuantity, passengerTypes.getDisplayName());
-            defaultPassenger++;
+            currentPassengerValue = Integer.parseInt(passengerQuantity.get().getText());
         }
     }
 
@@ -144,8 +153,7 @@ public class HomePage extends BasePage {
         inputArrivalDestination(bookingInformation.arrivalDestination());
 
         //Picking the departure and arrival day as counting number days from current day
-        selectFlightDate(bookingInformation.departDate(), FlightDateTypes.DEPART_DATE);
-        selectFlightDate(bookingInformation.arrivalDate(), FlightDateTypes.RETURN_DATE);
+        selectFlightDate(bookingInformation);
 
         //Input the quantity of passenger
         inputPassengerQuantity(bookingInformation.passenger());
