@@ -31,7 +31,7 @@ public class BookingTicket extends TestBase {
 
         Selenide.sleep(3000);
         //Verify the Passenger Info Form is displayed
-//        passengerInfoPage.verifyPassengerInfoFormIsDisplayed();
+        passengerInfoPage.verifyPassengerInfoFormIsDisplayed();
     }
 
     @DataProvider(name = "data_TC_01")

@@ -1,8 +1,10 @@
 package pages.vietjet;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import java.time.Duration;
 import java.util.function.Supplier;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -18,6 +20,6 @@ public class PassengerInfoPage extends BasePage{
 
     @Step("Verify Passenger Info Form is displayed")
     public void verifyPassengerInfoFormIsDisplayed(){
-        frmPassengerInfoForm.get().shouldBe(visible);
+        frmPassengerInfoForm.get().shouldBe(visible, Duration.ofSeconds(Configuration.timeout));
     }
 }

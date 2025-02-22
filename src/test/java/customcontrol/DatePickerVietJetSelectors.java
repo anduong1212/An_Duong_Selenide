@@ -25,6 +25,6 @@ public record DatePickerVietJetSelectors() implements DatePickerSelector {
 
     @Override
     public String dayCellXPathFormat() {
-        return "//div[@class='rdrMonth' and contains(div,'%s')]//button[@class='rdrDay']//span[text()='%s']";
+        return "//div[@class='rdrMonth' and contains(div,'%s')]//button[contains(@class,'rdrDay') and not(contains(@class,'rdrDayDisabled'))]//span[text()='%s']";
     }
 }

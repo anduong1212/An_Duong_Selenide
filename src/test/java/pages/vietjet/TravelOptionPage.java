@@ -22,8 +22,7 @@ public class TravelOptionPage extends BasePage {
     private final Supplier<ElementsCollection> ticketPriceElements = () -> $$("p.MuiTypography-h4");
     private final Supplier<ElementsCollection> currentLowestPriceElements = () -> $$("div.slick-current p.MuiTypography-subtitle1 span");
     private final Supplier<SelenideElement> vjFlightIconElement = () -> $x("//img[@alt='vietjet flight']");
-    private final Supplier<SelenideElement> continueButton = () -> $("button.MuiButton-contained");
-
+    private final Supplier<SelenideElement> continueButton = () -> $x("//button[contains(@class, 'MuiButton-contained')][.//span[text()='Continue']]");
     private static final String lblPriceElementFormat = "(//p[contains(@class, 'MuiTypography-h4')])[%d]";
     private static final int MAX_SCROLL_ATTEMPT = Integer.parseInt(System.getProperty("max.scroll.attempt", "20"));
 
@@ -164,10 +163,10 @@ public class TravelOptionPage extends BasePage {
             selectLowestPrice("arrival");   // Indicate arrival flight
         } else if ("oneway".equalsIgnoreCase(flightType)) {
             logger.info("Selecting ticket for oneway flight.");
-            selectLowestPrice("oneway");      // Indicate oneway flight
+            selectLowestPrice("departure");      // Indicate oneway flight
         } else {
             logger.warn("Unknown flight type: {}. Selecting ticket as if it's oneway.", flightType);
-            selectLowestPrice("unknown"); // Handle unknown type gracefully
+            selectLowestPrice("departure"); // Handle unknown type gracefully
         }
     }
 
