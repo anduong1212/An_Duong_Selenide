@@ -22,7 +22,6 @@ public abstract class TestBase {
     public void setUp(){
         Configurations.configure();
         Selenide.open(Configuration.baseUrl + LocaleManager.getSelectedLocale().getLocaleCode());
-
     }
 
     @BeforeMethod
