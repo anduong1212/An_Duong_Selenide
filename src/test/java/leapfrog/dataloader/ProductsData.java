@@ -3,6 +3,7 @@ package leapfrog.dataloader;
 import common.CSVUtilities;
 import common.Utilities;
 import leapfrog.dataobjects.Product;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.function.Function;
@@ -16,7 +17,7 @@ public class ProductsData {
             try {
                 String title = line[0];
                 String age = line[1];
-                double price = Double.parseDouble(line[2].replace("$", ""));
+                String price = line[2].replace(" ","");
 
                 return new Product(title, age, price);
             } catch (NumberFormatException nfe){
@@ -27,7 +28,12 @@ public class ProductsData {
         }
     };
 
+    @Getter
     List<Product> products = CSVUtilities.readCSV(CSV_FILE_PATH, productMapperFunction);
+
+    public Product getProductByTitle(String title){
+        return products.stream().filter(product -> product.title().equals(title)).findFirst().orElse(null);
+    }
 
     public static void main(String[] args) {
         ProductsData productsData = new ProductsData();
