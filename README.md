@@ -12,21 +12,21 @@ This project is built using Maven and designed to run automated UI tests using S
 8. [Additional Information](#additional-information)
 
 ## Features
-| Feature                                     | Status                                           | Note                                 |
-|---------------------------------------------|--------------------------------------------------|--------------------------------------|
-| Selenide FW                                 | <span style="color: green;">Implemented</span>   | JAVA 21, Selenide 7.6.1              |
-| Reports with HTML, Allure and Report Portal | <span style="color: green;">Implemented</span>   | Report Portal is not implemented yet |
-| Test retry                                  | <span style="color: green;">Implemented</span>   |                                      |
+| Feature                                     | Status                                         | Note                                 |
+|---------------------------------------------|------------------------------------------------|--------------------------------------|
+| Selenide FW                                 | <span style="color: green;">Implemented</span> | JAVA 21, Selenide 7.6.1              |
+| Reports with HTML, Allure and Report Portal | <span style="color: green;">Implemented</span> | Report Portal is not implemented yet |
+| Test retry                                  | <span style="color: green;">Implemented</span> |                                      |
 | Parallel/distributed testing                | <span style="color: red;">Not Implemented</span> |                                      |
-| Cross browsers testing                      | <span style="color: green;">Implemented</span>   | Microsoft Edge, Google Chrome        |
+| Cross browsers testing                      | <span style="color: green;">Implemented</span> | Microsoft Edge, Google Chrome        |
 | Selenium Grid/Shard                         | <span style="color: red;">Not Implemented</span> |                                      |
 | CI                                          | <span style="color: red;">Not Implemented</span> |                                      |
-| Content testing                             | <span style="color: red;">Not Implemented</span> |                                      |
-| Multiple languages testing                  | <span style="color: cyan;">In - Progress</span>  |                                      |
+| Content testing                             | <span style="color: green;">Implemented</span> |                                      |
+| Multiple languages testing                  | <span style="color: cyan;">In - Progress</span> |                                      |
 | Group tests by purposes                     | <span style="color: red;">Not Implemented</span> |                                      |
 | Source control practice                     | <span style="color: cyan;">In - Progress</span> |                                      |
 | Switch test environment                     | <span style="color: green;">Implemented</span> |                                      |
-| Wrap custom controls                        | <span style="color: red;">Not Implemented</span> |                                      |
+| Wrap custom controls                        | <span style="color: green;">Implemented</span> |                                      |
 
 ## Requirements
 - Java 21: Ensure that you have JDK 21 installed.
