@@ -13,9 +13,7 @@ public class Elements {
         $x(String.format(xpath, replaceText)).shouldBe(Condition.visible).click();
     }
 
-    public static void handleCalendar(String calendar, String calendarButton, String dateButton, String month, String year, String date){
-    }
-
+    //TODO: Implement the following methods
     //Example overnight, overday, oneway, roundTrip
     public static void handleBookingType(String bookingType, String bookingTypeButton){
     }

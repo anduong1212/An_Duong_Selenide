@@ -29,7 +29,6 @@ public class ProductPage {
             String productName = element.select("p a").text();
             String productAge = element.select("p.ageDisplay").text().replace("Ages ", "");
             String productPrice = element.selectFirst("p.prices span").text().replace("Price: ", "");
-//            System.out.println("Name: " + productName + "-" + "Age: " + productAge + "-" + "Price: " + productPrice);
             productsFromWeb.add(new Product(productName, productAge, productPrice));
         }
         return productsFromWeb;
