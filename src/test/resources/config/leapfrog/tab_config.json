@@ -3,18 +3,18 @@
     "tabName": "Pages 1-12",
     "startPage": 1,
     "endPage": 12,
-    "csvFilePath": "src/test/resources/leapfrog/leapfrog_games.csv"
+    "csvFilePath": "src/test/resources/data/leapfrog/leapfrog_games_page1_12.csv"
   },
   {
     "tabName": "Pages 13-23",
     "startPage": 13,
     "endPage": 23,
-    "csvFilePath": "src/test/resources/leapfrog/leapfrog_games.csv"
+    "csvFilePath": "src/test/resources/data/leapfrog/leapfrog_games_page13_23.csv"
   },
   {
     "tabName": "Pages 24-34",
     "startPage": 24,
     "endPage": 34,
-    "csvFilePath": "src/test/resources/leapfrog/leapfrog_games.csv"
+    "csvFilePath": "src/test/resources/data/leapfrog/leapfrog_games_page24_34.csv"
   }
 ]

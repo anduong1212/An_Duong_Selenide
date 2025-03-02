@@ -1,9 +1,6 @@
 package leapfrog.pages;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
-import common.CSVUtilities;
-import leapfrog.dataloader.ProductsData;
 import leapfrog.dataobjects.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,6 +16,8 @@ public class ProductPage {
      * @param pageNumber page number
      * @return List of products
      */
+    private final org.testng.log4testng.Logger logger4j = org.testng.log4testng.Logger.getLogger(ProductPage.class);
+
     public List<Product> getProductListFromPage(int pageNumber) {
         String pageSources = WebDriverRunner.driver().source();
         ProductPage page = new ProductPage();
@@ -41,19 +40,22 @@ public class ProductPage {
 
     public boolean compareProductLists(List<Product> list1, List<Product> list2) {
         if (list1 == null && list2 == null) {
+            logger4j.error("Both product lists are null");
             return true;
         }
 
         if (list1 == null || list2 == null || list1.size() != list2.size()) {
+            logger4j.error("Product list size mismatch");
             return false;
         }
 
         for (int i = 0; i < list1.size(); i++) {
             Product product1 = list1.get(i);
-            System.out.println("Product expected: " + product1.toString());
             Product product2 = list2.get(i);
-            System.out.println("Product actual: " + product2.toString());
+
             if (!product1.equals(product2)) {
+                logger4j.info("[FAILED] Product expected: " + product1.toString());
+                logger4j.info("[FAILED] Product actual: " + product2.toString());
                 return false;
             }
         }

@@ -4,16 +4,22 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import common.CSVUtilities;
 import common.JsonUtilities;
 import common.Utilities;
+import dataprovider.DataProvider;
 import leapfrog.dataobjects.Product;
 import leapfrog.dataobjects.TabConfig;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ProductsData {
-    private final String  CSV_FILE_PATH = "src/test/resources/data/leapfrog/leapfrog_games.csv";
 
+    private String FILE_PATH;
+    public ProductsData(String filePath){
+        this.FILE_PATH = filePath;
+    }
     //Declare the mapping function
     public Function<String[], Product> productMapperFunction = line -> {
         if (line.length == 4){
@@ -35,15 +41,20 @@ public class ProductsData {
     public Function<Product, String[]> productToCSVMapperFunction = product ->
             new String[]{String.valueOf(product.page()), product.title(), product.age(), product.price()};
 
-    @Getter
-    List<Product> products = CSVUtilities.readCSV(CSV_FILE_PATH, productMapperFunction);
 
-    public Product getProductByTitle(String title){
-        return products.stream().filter(product -> product.title().equals(title)).findFirst().orElse(null);
+    public Stream<Product> getProductOnPage(int pageNumber) {
+        {
+            List<Product> products = CSVUtilities.readCSV(FILE_PATH, productMapperFunction);
+
+            if (products == null || products.isEmpty()) {
+                System.err.println("Warning: No product data loaded from CSV file: " + FILE_PATH);
+                return Stream.empty();
+            }
+
+            return products.stream()
+                    .filter(product -> product.page() == pageNumber)
+                    .toList() // Collect to List first for easier debugging/logging (optional)
+                    .stream();
+        }
     }
-
-
-
-
-
 }
