@@ -1,12 +1,10 @@
 package common;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -47,4 +45,31 @@ public class CSVUtilities {
         }
         return dataList;
     }
+
+    /**
+     * Write list objects to CSV file
+     *
+     * @param objects     List of objects need to write to CSV.
+     * @param csvFilePath Output CSV file path.
+     * @param header      Header of CSV file.
+     * @param dataMapper  Function to map object to String array which represent for columns in CSV.
+     * @param <T>         Type of object in the list.
+     */
+    public static <T> void writeObjectsToCsv(List<T> objects, String csvFilePath, String[] header, Function<T, String[]> dataMapper) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath))) {
+            writer.writeNext(header);
+
+            for (T obj : objects) {
+                String[] data = dataMapper.apply(obj); //
+                if (data != null) {
+                    writer.writeNext(data);
+                } else {
+                    System.err.println("Warning: Data mapper returned null for object: " + obj + ". Skipping row.");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error during writing the CSV: " + csvFilePath);
+        }
+    }
 }
+

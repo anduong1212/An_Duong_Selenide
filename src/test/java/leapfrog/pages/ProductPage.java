@@ -2,19 +2,24 @@ package leapfrog.pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import common.CSVUtilities;
 import leapfrog.dataloader.ProductsData;
 import leapfrog.dataobjects.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductPage {
-    public List<Product> getProductListFromPage() {
+    /**
+     * Get product list from a page
+     * @param pageNumber page number
+     * @return List of products
+     */
+    public List<Product> getProductListFromPage(int pageNumber) {
         String pageSources = WebDriverRunner.driver().source();
         ProductPage page = new ProductPage();
 
@@ -29,7 +34,7 @@ public class ProductPage {
             String productName = element.select("p a").text();
             String productAge = element.select("p.ageDisplay").text().replace("Ages ", "");
             String productPrice = element.selectFirst("p.prices span").text().replace("Price: ", "");
-            productsFromWeb.add(new Product(productName, productAge, productPrice));
+            productsFromWeb.add(new Product(pageNumber, productName, productAge, productPrice));
         }
         return productsFromWeb;
     }
@@ -54,4 +59,6 @@ public class ProductPage {
         }
         return true;
     }
+
+
 }

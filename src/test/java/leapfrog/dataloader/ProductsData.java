@@ -1,25 +1,29 @@
 package leapfrog.dataloader;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import common.CSVUtilities;
+import common.JsonUtilities;
 import common.Utilities;
 import leapfrog.dataobjects.Product;
+import leapfrog.dataobjects.TabConfig;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.function.Function;
 
 public class ProductsData {
-    private final String  CSV_FILE_PATH = "src/test/resources/data/leapfrog_games.csv";
+    private final String  CSV_FILE_PATH = "src/test/resources/data/leapfrog/leapfrog_games.csv";
 
     //Declare the mapping function
-    Function<String[], Product> productMapperFunction = line -> {
-        if (line.length == 3){
+    public Function<String[], Product> productMapperFunction = line -> {
+        if (line.length == 4){
             try {
-                String title = line[0];
-                String age = line[1];
-                String price = line[2].replace(" ","");
+                int page = Integer.parseInt(line[0]);
+                String title = line[1];
+                String age = line[2];
+                String price = line[3].replace(" ","");
 
-                return new Product(title, age, price);
+                return new Product(page, title, age, price);
             } catch (NumberFormatException nfe){
                 throw new RuntimeException("Error parsing CSV row to Product object: " + String.join(",", line), nfe);
             }
@@ -28,6 +32,9 @@ public class ProductsData {
         }
     };
 
+    public Function<Product, String[]> productToCSVMapperFunction = product ->
+            new String[]{String.valueOf(product.page()), product.title(), product.age(), product.price()};
+
     @Getter
     List<Product> products = CSVUtilities.readCSV(CSV_FILE_PATH, productMapperFunction);
 
@@ -35,10 +42,8 @@ public class ProductsData {
         return products.stream().filter(product -> product.title().equals(title)).findFirst().orElse(null);
     }
 
-    public static void main(String[] args) {
-        ProductsData productsData = new ProductsData();
-        productsData.products.forEach(System.out::println);
-    }
+
+
 
 
 }
