@@ -22,7 +22,7 @@ This project is built using Maven and designed to run automated UI tests using S
 | Selenium Grid/Shard                         | <span style="color: red;">Not Implemented</span> |                                      |
 | CI                                          | <span style="color: red;">Not Implemented</span> |                                      |
 | Content testing                             | <span style="color: green;">Implemented</span> |                                      |
-| Multiple languages testing                  | <span style="color: cyan;">In - Progress</span> |                                      |
+| Multiple languages testing                  | <span style="color: grenn;">Implemented</span> |                                      |
 | Group tests by purposes                     | <span style="color: red;">Not Implemented</span> |                                      |
 | Source control practice                     | <span style="color: cyan;">In - Progress</span> |                                      |
 | Switch test environment                     | <span style="color: green;">Implemented</span> |                                      |
