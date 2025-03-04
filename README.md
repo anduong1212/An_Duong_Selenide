@@ -42,7 +42,7 @@ git clone https://github.com/your-repository/Selenide_AnDuong.git
 ## Run Tests
 This command will run the default suite
 ```sh
-git clone https://github.com/your-repository/Selenide_AnDuong.git
+mvn clean test
 ```
 This command will execute the tests based on the default profile (local_chrome_prod_en).
 
