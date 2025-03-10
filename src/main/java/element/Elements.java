@@ -9,8 +9,8 @@ public class Elements {
         return $x(String.format(xpath, replaceText)).shouldBe(Condition.visible).isDisplayed();
     }
 
-    public static void clickFormattedElement(String xpath, String... replaceText){
-        $x(String.format(xpath, replaceText)).shouldBe(Condition.visible).click();
+    public static void clickFormattedElement(String locator, String... replaceText){
+        $x(String.format(locator, replaceText)).shouldBe(Condition.visible).click();
     }
 
     //TODO: Implement the following methods
